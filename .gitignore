@@ -1,0 +1,110 @@
+# Docker 관련 (빌드 산출물 및 임시 설정)
+**/docker-compose.override.yml
+**/docker-compose.*.yml
+**/Dockerfile.*
+*.log
+
+# Jenkins 관련 (로그 및 워크스페이스)
+**/jenkins.log
+**/jenkins/workspace/
+
+# Kubernetes 관련
+*.kube/
+*.kube-*
+
+# AWS 관련
+*.pem
+*.key
+.aws/
+
+### Eclipse ###
+.metadata/              # Eclipse 작업 및 설정 내역 저장 폴더
+bin/                    # Eclipse 빌드 시 생성되는 클래스 파일 폴더
+tmp/                    # 임시 파일 저장용 폴더
+*.tmp                   # 임시 파일 확장자
+*.bak                   # 백업 파일
+*.swp                   # 편집기 임시 저장 파일(vi/vim 등)
+*~.nib                  # Mac OS X nib 임시 파일
+local.properties        # 로컬 개발 환경 설정 파일(개인별 설정)
+.loadpath               # Eclipse 빌드 경로 정보 파일
+.recommenders/          # 코드 추천 관련 폴더
+.externalToolBuilders/  # 외부 도구 빌드 시 생성 폴더
+*.launch                # Eclipse 실행 구성 파일
+*.pydevproject          # PyDev 플러그인 관련 프로젝트 파일
+.cproject               # CDT(C/C++) 프로젝트 파일
+.autotools/             # CDT autotools 관련 폴더
+.buildpath              # PHP 개발 환경 관련 파일
+.tern-project/          # JavaScript Tern 프로젝트 관련 파일
+.texlipse/              # LaTeX 플러그인 관련 폴더
+.springBeans/           # Spring Tool Suite 관련 설정 폴더
+.apt_generated/         # 애노테이션 처리후 자동 생성 파일
+.apt_generated_test/    # 테스트용 애노테이션 처리 생성 파일
+.cache-main/            # Scala IDE 내부 캐시
+.scala_dependencies/    # Scala 의존성 관련 폴더
+.worksheet/             # Scala Worksheet 임시 파일
+# .project             # Eclipse 프로젝트 기술 파일 (필요 시 커밋)
+
+### Eclipse Patch ###
+.sts4-cache/            # Spring Tool Suite 캐시 파일
+
+### Maven ###
+target/                 # Maven 빌드 결과물 출력 폴더
+pom.xml.tag             # Maven pom 태그 임시 파일
+pom.xml.releaseBackup   # Maven 릴리즈 백업 파일
+pom.xml.versionsBackup  # Maven 버전 관리 백업 파일
+pom.xml.next            # Maven 다음 빌드 설정 임시 파일
+release.properties      # Maven 릴리즈 정보 파일
+dependency-reduced-pom.xml # 의존성 축소 POM 파일
+buildNumber.properties  # 빌드 번호 기록 파일
+.mvn/timing.properties  # Maven Wrapper 타이밍 기록 파일
+.mvn/wrapper/maven-wrapper.jar # Maven Wrapper 실행용 jar 파일
+
+# Eclipse m2e 생성 파일
+.project                # Eclipse 프로젝트 메타정보 파일
+.classpath              # Java 클래스 경로 설정 파일
+
+### Windows ###
+Thumbs.db               # 윈도우 썸네일 캐시 파일
+Thumbs.db:encryptable   # 윈도우 썸네일 캐시 (암호화 가능)
+ehthumbs.db             # 윈도우 썸네일 캐시
+ehthumbs_vista.db       # 윈도우 썸네일 캐시(Vista 버전)
+*.stackdump             # 프로그램 충돌 스택 덤프 파일
+[Dd]esktop.ini          # 윈도우 폴더 설정 파일
+$RECYCLE.BIN/           # 삭제된 파일 보관 휴지통
+*.cab                   # 윈도우 설치 캐비닛 파일
+*.msi                   # 윈도우 설치 프로그램 파일
+*.msix                  # 마이크로소프트 설치 패키지
+*.msm                   # 윈도우 설치 모듈 파일
+*.msp                   # 윈도우 업데이트 패키지
+*.lnk                   # 윈도우 바로가기 파일
+
+### IntelliJ IDEA ###
+.idea/                  # IntelliJ 프로젝트 설정 폴더
+*.iws                   # IntelliJ 작업 세션 파일
+*.iml                   # IntelliJ 모듈 설정 파일
+*.ipr                   # IntelliJ 프로젝트 설정 파일
+
+### NetBeans ###
+/nbproject/private/      # NetBeans 환경 설정
+/nbbuild/               # NetBeans 빌드 캐시
+/dist/                  # NetBeans 배포 산출물
+/nbdist/                # NetBeans 배포 패키지
+/.nb-gradle/            # NetBeans Gradle 캐시 폴더
+build/                  # 일반 빌드 산출물
+!**/src/main/**/build/  # 주요 소스 코드 빌드 산출물은 제외에서 제외
+!**/src/test/**/build/  # 테스트 소스 빌드 산출물은 제외에서 제외
+
+### VS Code ###
+.vscode/                 # VSCode 환경 설정 폴더
+
+### 기타 로그 및 임시 파일 ###
+*.log                   # 로그 파일
+*.tmp                   # 임시 파일
+
+
+# 환경 변수 및 민감 정보
+.env
+.env.*
+target/
+.settings/
+.factorypath

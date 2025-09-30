@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.or.iei.admin.model.dao.AdminDao">
+
+	<!-- 전체 게시글 갯수 조회 -->
+	<select id="selectBoardCount">
+	select count(*)
+	  from tbl_board
+	</select>
+	
+	<!-- 전체 게시글 조회 -->
+	<select id="selectBoardList" 
+	parameterType="PageInfo" 
+	resultType="Board">
+	select board_no boardNo,
+	       board_title boardTitle,
+	       board_thumb boardThumbPath,
+	       board_writer boardWriter,
+	       board_date boardDate,
+	       board_status as boardStatus
+	  from (
+	       select rownum rnum, a.*
+	         from (
+	               select board_no,
+	                      board_title,
+	                      board_thumb,
+	                      board_writer,
+	                      board_date,
+	                      board_status
+	                 from tbl_board
+	                order by board_date desc
+	              ) a
+	        ) a
+	 where a.rnum between #{start} and #{end}
+	 </select>
+	
+	<!-- 게시글 상태 변경 -->
+	<update id="updateBoardStatus" 
+	parameterType="Board">
+	update tbl_board
+	   set board_status = #{boardStatus}
+	 where board_no = #{boardNo}
+	</update>
+	
+	<!-- 전체 회원 수 조회 -->
+	<select id="selectMemberCount">
+	select count(*)
+	  from tbl_member
+	</select>
+	
+	<!-- 전체 회원 조회 (비밀번호 제외)-->
+	<select id="selectMemberList" 
+	parameterType="PageInfo" 
+	resultType="Member">
+	select member_id as memberId,
+           member_name as memberName,
+           member_phone as memberPhone,
+           member_level as memberLevel
+	  from (
+	       select rownum rnum, a.*
+	         from (
+	               select member_id,
+	                      member_name,
+	                      member_phone,
+	                      member_level
+	                 from tbl_member
+	                order by member_id
+	              ) a
+	        ) a
+	 where a.rnum between #{start} and #{end}
+	 </select>
+	 
+	 <update id="updateMemberLevel" 
+	 parameterType="Member">
+	 update tbl_member
+	    set member_level = #{memberLevel}
+	  where member_id = #{memberId}
+	 </update>
+</mapper>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.or.iei.board.model.dao.BoardDao">
+
+	<!-- 공개 게시글 갯수 조회 -->
+	<select id="selectBoardCount">
+	select count(*)
+	  from tbl_board
+	 where board_status = 1
+	</select>
+	
+	<!-- 공개 게시글 조회 -->
+	<select id="selectBoardList" 
+	parameterType="PageInfo" 
+	resultType="Board">
+	select board_no boardNo,
+	       board_title boardTitle,
+	       board_thumb boardThumbPath,
+	       board_writer boardWriter,
+	       board_date boardDate
+	  from (
+	       select rownum rnum, a.*
+	         from (
+	               select board_no,
+	                      board_title,
+	                      board_thumb,
+	                      board_writer,
+	                      board_date
+	                 from tbl_board
+	                where board_status = 1
+	                order by board_date desc
+	              ) a
+	        ) a
+	 where a.rnum between #{start} and #{end}
+	 </select>
+	 
+	 <!-- 게시글 번호 조회 -->
+	 <select id="selectBoardNo" resultType="_int">
+	 select seq_board.nextval from dual
+	 </select>
+	 
+	 <!-- 게시글 등록 -->
+	 <insert id="insertBoard" parameterType="Board">
+	 insert into tbl_board
+	 	values 
+	 	(
+	 	#{boardNo},
+	 	#{boardTitle},
+	 	#{boardThumbPath},
+	 	#{boardContent},
+	 	#{boardWriter},
+	 	1,
+	 	sysdate
+	 	)
+	 </insert>
+	 
+	 <!-- 게시글 파일 등록 -->
+	 <insert id="insertBoardFile" 
+	 parameterType="BoardFile">
+	 insert into tbl_board_file
+	 	values 
+	 	(
+	 	seq_board_file.nextval,
+	 	#{boardNo},
+	 	#{fileName},
+	 	#{filePath}
+	 	)
+	 </insert>
+	 
+	 <!-- 게시글 상세 조회
+	 resultMap = "boardMap" => 
+	 조회 결과를 내 마음대로 편집하고자 할 때 사용. 
+	 -->
+	 <select id="selectOneBoard" 
+	 parameterType="_int" 
+	 resultMap="boardMap">
+	 select board_no,
+	        board_title,
+	        board_thumb,
+	        board_content,
+	        board_writer,
+	        board_status,
+	        board_date
+	   from tbl_board
+      where board_no = #{_parameter}
+	 </select>
+	 <select id="selectBoardFileList" 
+	 parameterType="_int" 
+	 resultType="BoardFile">
+	 select board_file_no boardFileNo,
+	        board_no boardNo,
+	        file_name fileName,
+	        file_path filePath
+	   from tbl_board_file
+	  where board_no = #{_parameter}
+	 </select>
+	 <!-- type : 최종 반환 타입
+	      id : resultMap 고유 값.
+	  -->
+	 <resultMap type="Board" id="boardMap">
+	<!-- SQL 조회 결과 컬럼을, type에 작성된 DTO의 어느 변수에 바인딩할 지 -->
+	 	<result column="board_no" property="boardNo"/>
+	 	<result column="board_title" property="boardTitle"/>
+	 	<result column="board_thumb" property="boardThumbPath"/>
+	 	<result column="board_content" property="boardContent"/>
+	 	<result column="board_writer" property="boardWriter"/>
+	 	<result column="board_status" property="boardStatus"/>
+	 	<result column="board_date" property="boardDate"/>
+ 	<!-- 파일리스트
+ 	     property : 조회 결과를 type으로 지정된 DTO의 어느 변수에 바인딩할 지
+ 	     select : 실행 SQL ID
+ 	     column : 실행 SQL에 필요한 파라미터
+ 	     javaType : 실행 결과를 담을 Java 변수 타입
+ 	     ofType : javaType의 제네릭 타입
+ 	     
+ 	 -->
+	 	<collection property="fileList"
+	 				select="selectBoardFileList"
+	 				column="board_no"
+	 				javaType="java.util.List"
+	 				ofType="BoardFile">
+	 	</collection>
+	 </resultMap>
+	 
+	 <select id="selectBoardFile" 
+	 parameterType="_int" 
+	 resultType="BoardFile">
+	 select board_file_no boardFileNo,
+	        board_no boardNo,
+	        file_name fileName,
+	        file_path filePath
+	   from tbl_board_file
+	  where board_file_no = #{_parameter}
+	 </select>
+	 
+	 <delete id="deleteBoard" 
+	 parameterType="_int">
+	 delete from tbl_board where board_no = #{_parameter}
+	 </delete>
+	 
+	 <!-- 새로운 썸네일 없을 시, 기존 썸네일 null 처리 되므로 if 처리 -->
+	 <update id="updateBoard" 
+	 parameterType="Board">
+	 update tbl_board
+	    set board_title = #{boardTitle},
+	        board_content = #{boardContent}
+	        <if test="boardThumbPath != null and boardThumbPath != ''">
+	        ,board_thumb = #{boardThumbPath}
+	        </if>
+	  where board_no = #{boardNo}
+	 </update>
+	 
+	 <!-- 게시글 수정 시, 삭제 대상 파일's filePath 조회 -->
+	 <select id="selectDelBoardFile" 
+	 parameterType="map" 
+	 resultType="BoardFile">
+	 select file_path filePath
+	   from tbl_board_file
+	  where board_file_no in
+	  <foreach item="boardFileNo" 
+	  collection="array" 
+	  open="(" 
+	  separator="," 
+	  close=")">
+        #{boardFileNo}
+     </foreach>
+	 </select>
+	 
+	 <delete id="deleteBoardFile" 
+	 parameterType="map">
+	 delete from tbl_board_file
+	 where board_file_no in
+	  <foreach item="boardFileNo" 
+	  collection="array" 
+	  open="(" 
+	  separator="," 
+	  close=")">
+        #{boardFileNo}
+     </foreach>
+	 </delete>
+</mapper>
