@@ -21,8 +21,8 @@ pipeline {
         stage('Build') {
             steps {
                 // Maven을 사용하여 프로젝트 빌드
-                sh 'mvn clean package'  
- 	    //Gradle sh './gradlew clean build'
+                bat 'mvn clean package'  
+ 	    //Gradle bat './gradlew clean build'
             }
         }
 
@@ -32,7 +32,7 @@ pipeline {
                 // 빌드된 jar 파일은 Dockerfile에 의해 이미지에 포함.
                 script {
                     def imageTag = "${env.DOCKERHUB_USERNAME}/${env.DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}"
-                    sh "docker build -t ${imageTag} ."
+                    bat "docker build -t ${imageTag} ."
                     env.DOCKER_IMAGE_TAG = imageTag
                 }
             }
@@ -42,8 +42,8 @@ pipeline {
             steps {
                 // Docker Hub 로그인 정보를 사용하여 이미지 푸시
                 withCredentials([usernamePassword(credentialsId: env.DOCKERHUB_CREDENTIALS_ID, usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
-                    sh "docker login -u ${DOCKERHUB_USER} -p ${DOCKERHUB_PASS}"
-                    sh "docker push ${env.DOCKER_IMAGE_TAG}"
+                    bat "docker login -u ${DOCKERHUB_USER} -p ${DOCKERHUB_PASS}"
+                    bat "docker push ${env.DOCKER_IMAGE_TAG}"
                 }
             }
         }
