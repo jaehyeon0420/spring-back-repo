@@ -11,6 +11,12 @@ pipeline {
     }
 
     stages {
+       stage('Cleanup Workspace') {
+            steps {
+                // 빌드마다 이전 빌드의 모든 파일을 삭제
+                cleanWs()
+            }
+        }
         stage('Checkout Code') {
             steps {
                 // GitHub 저장소에서 코드 가져오기
