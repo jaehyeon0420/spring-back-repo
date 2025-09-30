@@ -3,7 +3,7 @@ pipeline {
 
     environment { //전역 환경변수
         // Docker Hub 사용자 이름
-        DOCKERHUB_USERNAME = 'jaehyeon'
+        DOCKERHUB_USERNAME = 'baejaehyeon'
         // Docker Hub에 업로드할 이미지 이름
         DOCKER_IMAGE_NAME = "jenkins-spring-back"
         // 젠킨스 Credential ID (Docker Hub 로그인 정보)
