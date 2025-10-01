@@ -1,6 +1,6 @@
 pipeline {
     agent any
-  
+    
     environment { //전역 환경변수
         DOCKER_REGISTRY = "docker.io"
         // Docker Hub 사용자 이름
