@@ -2,16 +2,12 @@ pipeline {
     agent any
       
     environment { //전역 환경변수
-        DOCKER_REGISTRY = "docker.io"
         // Docker Hub 사용자 이름
         DOCKERHUB_USERNAME = 'baejaehyeon'
         // Docker Hub에 업로드할 이미지 이름
         DOCKER_IMAGE_NAME = "spring-app"
-        // Jenkins 빌드 번호로 버전 구분
-        DOCKER_IMAGE_TAG = "1.0.${BUILD_NUMBER}"  
         // 젠킨스 Credential ID (Docker Hub 로그인 정보)
         DOCKERHUB_CREDENTIALS_ID = 'dockerhub-credentials'
-        FULL_IMAGE_NAME = "${DOCKER_REGISTRY}/${DOCKERHUB_USERNAME}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
     }
 
     stages {
